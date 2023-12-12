@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-app-bar class="bg-red white--text d-flex justify-center text-center" app>
+      <v-app-bar class="bg-red-lighten-1 white--text d-flex justify-center text-center" app>
         <v-toolbar-title 
           >TruckMiles
           <span >&reg;</span></v-toolbar-title

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mt-2 mx-1 px-1" elevation="9">
+    <v-card class="mt-2 mx-1 px-1 bg-red-lighten-1" elevation="9">
       <v-container fluid>
         <v-row>
           <v-col cols="10">
@@ -10,12 +10,11 @@
               color="red"
               v-model="checkbox1"
               :label="`Set Origin to My GPS Location`"
-              
             ></v-switch>
           </v-col>
 
           <v-col cols="1">
-            <v-icon class="py-5"> mdi-access-point </v-icon>
+            <v-icon class="red py-5"> mdi-access-point </v-icon>
           </v-col>
         </v-row>
       </v-container>
@@ -24,10 +23,10 @@
         <div @click="isVisible = !isVisible" class="selected-item">
           <span v-if="selectedItem">{{
             selectedItem.City +
-              "," +
-              selectedItem.State +
-              ", " +
-              selectedItem.PostalCode
+            "," +
+            selectedItem.State +
+            ", " +
+            selectedItem.PostalCode
           }}</span>
           <span v-else>Start Location</span>
           <svg
@@ -81,20 +80,19 @@
               >
                 {{
                   Location.City +
-                    ", " +
-                    Location.State +
-                    ", " +
-                    Location.PostalCode
+                  ", " +
+                  Location.State +
+                  ", " +
+                  Location.PostalCode
                 }}
               </li>
             </ul>
           </div>
         </div>
       </section>
-<br>
-<br>
+      <br />
+      <br />
       <div class="px-2 my-15">
-        
         <v-card-text>Trip Options</v-card-text>
         <v-select :items="r_items" filled label="Practical"></v-select>
         <v-switch pa-5 v-model="checkbox2" :label="`Close Borders`"></v-switch>
@@ -105,10 +103,7 @@
         ></v-switch>
         <v-btn @click="testRunTrip"> Run Trip </v-btn>
         {{ this.tresults.TripDistance }}
-        <div>
-    
-  </div>
-        
+        <div></div>
       </div>
     </v-card>
   </div>
@@ -119,7 +114,6 @@
 
 import { lookUpKey, tmAPIKey } from "./tmAPIKey";
 export default {
- 
   components: {},
   name: "TripDetail",
   data: () => ({
@@ -147,29 +141,27 @@ export default {
     tresults: [],
   }),
   watch: {
-    checkbox1: function(newValue) {
+    checkbox1: function (newValue) {
       if (newValue) {
         this.setOriginToCurrentLocation();
       } else {
-        this.myPos =""
+        this.myPos = "";
         this.getLocations();
       }
     },
-    myPos: function() {
+    myPos: function () {
       if (this.myPos.length >= 3 && !this.checkbox1) {
         this.getLocations();
       }
     },
-    destinationPos: function() {
-    if (this.destinationPos.length >= 3 )
-      // Add any logic related to the destinationPos here
-      // You can call getLocations or perform any other necessary actions
-      this.getLocations2();
+    destinationPos: function () {
+      if (this.destinationPos.length >= 3)
+        // Add any logic related to the destinationPos here
+        // You can call getLocations or perform any other necessary actions
+        this.getLocations2();
     },
   },
   methods: {
-   
-    
     setOriginToCurrentLocation() {
       if (navigator.geolocation) {
         var options = {
@@ -224,7 +216,6 @@ export default {
       this.selectedItem = Location;
 
       this.isVisible = true;
-      
     },
     filteredLoctions() {
       return this.userArray.filter((Location) => {

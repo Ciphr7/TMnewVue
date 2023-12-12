@@ -1,6 +1,6 @@
 <template>
-  <v-sheet darken padless class="blue lighten-1">
-    <v-navigation-drawer location="left" class="pa-2" v-model="Drawer1">
+  <v-sheet  padless class="bg-blue-grey-darken-3">
+    <v-navigation-drawer location="left" class="bg-blue-grey-darken-3 px-1" v-model="Drawer1">
       <v-list-item class="white--text d-flex justify-center">
         <v-container>
         <v-img aspect-ratio="2.5" src="../assets/logo.png"></v-img>
@@ -13,21 +13,21 @@
         </v-list-item-subtitle>
       </v-list-item>
       
-      <v-divider class="red lighten-1"></v-divider>
+      <v-divider class="red"></v-divider>
      
      <trip-details />
 
     </v-navigation-drawer>
 
     <v-navigation-drawer
-      class="pa-2"
+      class="pa-2 bg-blue-grey-darken-3"
       right
       color="dark"
       v-model="Drawer2"
       app
       location="right"
     >
-      <v-list-item class="white--text d-flex justify-center">
+      <v-list-item class=" white--text d-flex justify-center">
         <v-container>
           <v-img src="../assets/logo.png" aspect-ratio="2.5"> </v-img>
         </v-container>
@@ -51,8 +51,8 @@
       </v-card>
     </v-navigation-drawer>
     
-    <v-card class="mx-auto my-3" color="red" width="70%">
-      <v-footer>
+    <v-card class="mx-auto my-3 " width="70%">
+      <v-footer class="bg-red-lighten-1">
         <v-card-text class="d-flex justify-center">
           <v-btn>
             <v-icon @click="Drawer1 = !Drawer1"> mdi-home </v-icon>
