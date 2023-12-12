@@ -14,7 +14,9 @@
       </v-list-item>
       
       <v-divider class="red lighten-1"></v-divider>
-     <user-location />
+     
+     <trip-details />
+
     </v-navigation-drawer>
 
     <v-navigation-drawer
@@ -82,11 +84,11 @@
 </template>
 
 <script>
-import UserLocation from './UserLocation.vue';
-import UserLocationVue from './UserLocation.vue';
+
+import TripDetails from './TripDetails.vue';
 
 export default {
-  components: {UserLocation},
+  components: {TripDetails},
   name: "Footer",
   data: () => ({
     Drawer2: false,
