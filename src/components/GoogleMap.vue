@@ -3,7 +3,7 @@
       :center="center"
       :zoom="4"
       map-type-id="terrain"
-      style="width: 100%; height: calc(var(--vh, 1vh) * 80)"
+      style=" width: 100%; height: calc(var(--vh, 1vh) * 100)"
   >
     <GMapCluster>
       <GMapMarker
