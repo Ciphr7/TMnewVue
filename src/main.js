@@ -10,6 +10,7 @@ import VueGoogleMaps from '@fawmi/vue-google-maps'
 
 // Components
 import App from './App.vue'
+
 import { apiKey } from './components/googleApiKey'
 
 // Composables
@@ -22,6 +23,8 @@ app.use(VueGoogleMaps, {
         key: apiKey,
     },
 })
+
+
 
 registerPlugins(app)
 

@@ -14,8 +14,9 @@
       </v-list-item>
       
       <v-divider class="red"></v-divider>
+    
      
-     <trip-details />
+    <trip-details />
 
     </v-navigation-drawer>
 
@@ -36,10 +37,12 @@
         </v-list-item-title>
         <v-list-item-subtitle class="white--text d-flex justify-center">
           Trip route detailes
+         <trip-results />
         </v-list-item-subtitle>
       </v-list-item>
-
+      <counter-display />
       <v-divider class="red lighten-1"></v-divider>
+     
 
       <v-card class="px-2" elevation="9">
         <v-text-field
@@ -84,11 +87,14 @@
 </template>
 
 <script>
-
 import TripDetails from './TripDetails.vue';
 
+import TripResults from './TripResults.vue';
+
 export default {
-  components: {TripDetails},
+  components: {
+    TripDetails  , TripResults
+    },
   name: "Footer",
   data: () => ({
     Drawer2: false,

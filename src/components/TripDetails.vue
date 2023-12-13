@@ -156,7 +156,14 @@
         ></v-switch>
         <v-btn @click="testRunTrip"> Run Trip </v-btn>
         {{ this.tresults.TripDistance }}
-        <div></div>
+       
+          <div>
+            <div>
+      
+      
+    </div>
+  
+        </div>
       </div>
     </v-card>
   </div>
@@ -166,8 +173,13 @@
 //import autoComplete from "./autoComplete.vue"
 
 import { lookUpKey, tmAPIKey } from "./tmAPIKey";
+
+import { mapMutations, mapActions } from 'vuex';
+import TripResults from "./TripResults.vue";
+
 export default {
-  components: {},
+  
+  components: {TripResults},
   name: "TripDetail",
   data: () => ({
     myPos: null,
@@ -221,6 +233,8 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('counter', ['increment', 'decrement']),
+      ...mapActions('counter', ['incrementAsync']),
     setOriginToCurrentLocation() {
       if (navigator.geolocation) {
         var options = {
@@ -340,6 +354,8 @@ export default {
           console.log(this.myPos);
           console.log(JSON.stringify(data));
           this.tresults = data;
+          this.$store.commit('setTResults', data);
+          this.$emit('trip-results', this.tresults);
         })
         .catch((error) => {
           console.error("Error:", error);

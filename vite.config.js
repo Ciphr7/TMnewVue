@@ -9,9 +9,14 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  
   plugins: [
     vue({
-      template: { transformAssetUrls }
+      template: { transformAssetUrls },
+      chainWebpack: config => {
+        config.resolve.alias.set('vue', 'vue/dist/vue.esm-bundler.js');
+      }
+      
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
     vuetify({
@@ -29,6 +34,7 @@ export default defineConfig({
   define: { 'process.env': {} },
   resolve: {
     alias: {
+      
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
     extensions: [
@@ -44,4 +50,5 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  
 })
