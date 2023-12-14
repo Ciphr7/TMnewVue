@@ -27,6 +27,7 @@
       v-model="Drawer2"
       app
       location="right"
+      style="max-height: 100vh; overflow-y: hidden;"
     >
       <v-list-item class=" white--text d-flex justify-center">
         <v-container>
@@ -37,21 +38,13 @@
         </v-list-item-title>
         <v-list-item-subtitle class="white--text d-flex justify-center">
           Trip route detailes
-         <trip-results />
+         
         </v-list-item-subtitle>
       </v-list-item>
-      <counter-display />
-      <v-divider class="red lighten-1"></v-divider>
-     
 
-      <v-card class="px-2" elevation="9">
-        <v-text-field
-          label="input label"
-          :rules="rules"
-          hide-details="auto"
-          class="px-2"
-        ></v-text-field>
-      </v-card>
+      <trip-results />
+      <v-divider class="bg-red lighten-1"></v-divider>
+     
     </v-navigation-drawer>
     
     <v-card class="mx-auto my-3 " width="70%">

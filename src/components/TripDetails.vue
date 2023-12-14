@@ -156,14 +156,8 @@
         ></v-switch>
         <v-btn @click="testRunTrip"> Run Trip </v-btn>
         {{ this.tresults.TripDistance }}
-       
-          <div>
-            <div>
-      
-      
-    </div>
-  
-        </div>
+
+        <div></div>
       </div>
     </v-card>
   </div>
@@ -174,12 +168,11 @@
 
 import { lookUpKey, tmAPIKey } from "./tmAPIKey";
 
-import { mapMutations, mapActions } from 'vuex';
+import { mapMutations, mapActions } from "vuex";
 import TripResults from "./TripResults.vue";
 
 export default {
-  
-  components: {TripResults},
+  components: { TripResults },
   name: "TripDetail",
   data: () => ({
     myPos: null,
@@ -209,7 +202,6 @@ export default {
     timeout: null,
     debounceMilliseconds: 250,
     tresults: [],
-    
   }),
   watch: {
     checkbox1: function (newValue) {
@@ -233,8 +225,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('counter', ['increment', 'decrement']),
-      ...mapActions('counter', ['incrementAsync']),
+    
     setOriginToCurrentLocation() {
       if (navigator.geolocation) {
         var options = {
@@ -354,8 +345,8 @@ export default {
           console.log(this.myPos);
           console.log(JSON.stringify(data));
           this.tresults = data;
-          this.$store.commit('setTResults', data);
-          this.$emit('trip-results', this.tresults);
+          this.$store.commit("setTResults", data);
+          this.$emit("trip-results", this.tresults);
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -403,7 +394,6 @@ export default {
     }
   }
   .dropdown-popover {
-   
     z-index: 1;
     border: 2px solid rgb(157, 4, 4);
     top: 46px;
@@ -416,9 +406,8 @@ export default {
     transition: all 0.5s ease-in-out;
     max-height: 0px;
     overflow: hidden;
-    
+
     &.visible {
-      
       max-height: 400px;
       visibility: visible;
     }
@@ -434,7 +423,7 @@ export default {
 
   .options {
     width: 100%;
-    position:absolute;
+    position: absolute;
 
     ul {
       list-style: none;
