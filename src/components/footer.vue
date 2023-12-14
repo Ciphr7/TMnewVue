@@ -27,7 +27,6 @@
       v-model="Drawer2"
       app
       location="right"
-      style="max-height: 100vh; overflow-y: hidden;"
     >
       <v-list-item class=" white--text d-flex justify-center">
         <v-container>
@@ -41,10 +40,11 @@
          
         </v-list-item-subtitle>
       </v-list-item>
-
       <trip-results />
-      <v-divider class="bg-red lighten-1"></v-divider>
+      <v-divider class="red lighten-1"></v-divider>
      
+
+    
     </v-navigation-drawer>
     
     <v-card class="mx-auto my-3 " width="70%">
