@@ -278,7 +278,7 @@ export default {
 
     selectItem(Location) {
       this.selectedItem = Location;
-
+    
       this.isVisible = false;
     },
     selectItem2(Location2) {
@@ -301,12 +301,12 @@ export default {
         TripLegs: [
           {
             Address: "",
-            City: "",
-            State: "",
-            PostalCode: "",
+            City: this.selectedItem.City,
+            State: this.selectedItem.State,
+            PostalCode: this.selectedItem.PostalCode,
             Latitude: "",
             Longitude: "",
-            LocationText: this.myPos,
+            LocationText: "",
           },
           {
             Address: "",
