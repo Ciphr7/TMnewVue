@@ -28,7 +28,7 @@
             ", " +
             selectedItem.PostalCode
           }}</span>
-          <span v-else>Start Location</span>
+          <span v-else>{{this.myPos}}</span>
           <svg
             :class="isVisible ? 'dropdown' : ''"
             class="drop-down-icon"
