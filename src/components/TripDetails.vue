@@ -8,7 +8,7 @@
               id="SetToCurrentLocation"
               class="py-1"
               color="red"
-              v-model="checkbox1"
+              v-model="gpsCheck"
               :label="`Set Origin to My GPS Location`"
             ></v-switch>
           </v-col>
@@ -28,7 +28,7 @@
             ", " +
             selectedItem.PostalCode
           }}</span>
-          <span v-else>{{this.myPos}}</span>
+          <span v-else>{{ this.myOrg }}</span>
           <svg
             :class="isVisible ? 'dropdown' : ''"
             class="drop-down-icon"
@@ -52,7 +52,7 @@
             :rules="rules"
             hide-details="auto"
             class="px-2"
-            v-model="myPos"
+            v-model="myOrg"
             type="text"
             placeholder="Search for Location"
             tabindex="1"
@@ -148,10 +148,14 @@
       <div class="px-2 my-15">
         <v-card-text>Trip Options</v-card-text>
         <v-select :items="r_items" filled label="Practical"></v-select>
-        <v-switch pa-5 v-model="checkbox2" :label="`Close Borders`"></v-switch>
+        <v-switch
+          pa-5
+          v-model="borderCheck"
+          :label="`Close Borders`"
+        ></v-switch>
         <v-switch
           class="p-0 m-0"
-          v-model="checkbox3"
+          v-model="tollCheck"
           :label="`Avoid Toll`"
         ></v-switch>
         <v-btn @click="testRunTrip"> Run Trip </v-btn>
@@ -168,14 +172,18 @@
 
 import { lookUpKey, tmAPIKey } from "./tmAPIKey";
 
-import { mapMutations, mapActions } from "vuex";
 import TripResults from "./TripResults.vue";
 
 export default {
   components: { TripResults },
   name: "TripDetail",
+  mounted() {
+    // Listen for the custom event emitted by the first component
+    this.$root.$on("lat", this.lat);
+    this.$root.$on("lon", this.lon);
+  },
   data: () => ({
-    myPos: null,
+    myOrg: null,
     r_items: ["practical", "Shortest", "Interstate"],
     value: false,
     right: true,
@@ -183,9 +191,9 @@ export default {
       (value) => !!value || "Required.",
       (value) => (value || "").length <= 20 || "Max 20 characters",
     ],
-    checkbox1: false,
-    checkbox2: true,
-    checkbox3: true,
+    gpsCheck: false,
+    borderCheck: false,
+    tollCheck: false,
     destinationPos: "",
     url: "https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=",
     apikey: lookUpKey,
@@ -195,7 +203,6 @@ export default {
     selectedItem2: null,
     isVisible: false,
     isVisible2: false,
-
     searchQuery: "",
     Location: [],
     Location2: [],
@@ -204,16 +211,16 @@ export default {
     tresults: [],
   }),
   watch: {
-    checkbox1: function (newValue) {
+    gpsCheck: function (newValue) {
+      this.myOrg = "";
       if (newValue) {
         this.setOriginToCurrentLocation();
       } else {
-        this.myPos = "";
         this.getLocations();
       }
     },
-    myPos: function () {
-      if (this.myPos.length >= 3 && !this.checkbox1) {
+    myOrg: function () {
+      if (this.myOrg.length >= 3 && !this.gpsCheck) {
         this.getLocations();
       }
     },
@@ -225,7 +232,6 @@ export default {
     },
   },
   methods: {
-    
     setOriginToCurrentLocation() {
       if (navigator.geolocation) {
         var options = {
@@ -244,9 +250,15 @@ export default {
     },
 
     success(position) {
+      this.myOrg = "";
       var lat = position.coords.latitude;
       var lon = position.coords.longitude;
-      this.myPos = lat + ":" + lon;
+      this.myOrg = lat + ":" + lon;
+      this.$store.commit("setLat", lat);
+      this.$emit("lat", this.lat);
+      this.$store.commit("setLon", lon);
+      this.$emit("lon", this.lon);
+      console.log(this.$store.state.lon);
     },
 
     error(err) {
@@ -256,7 +268,7 @@ export default {
     async getLocations() {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
-        fetch(this.url + this.myPos + this.apikey)
+        fetch(this.url + this.myOrg + this.apikey)
           .then((res) => res.json())
           .then((json) => {
             console.log(json);
@@ -278,7 +290,7 @@ export default {
 
     selectItem(Location) {
       this.selectedItem = Location;
-    
+
       this.isVisible = false;
     },
     selectItem2(Location2) {
@@ -301,18 +313,18 @@ export default {
         TripLegs: [
           {
             Address: "",
-            City: this.selectedItem.City,
-            State: this.selectedItem.State,
-            PostalCode: this.selectedItem.PostalCode,
-            Latitude: "",
-            Longitude: "",
+            City: "",
+            State: "",
+            PostalCode: "",
+            Latitude: this.$store.state.lat,
+            Longitude: this.$store.state.lon,
             LocationText: "",
           },
           {
             Address: "",
-            City: "",
-            State: "",
-            PostalCode: "",
+            City: this.selectedItem2.City,
+            State: this.selectedItem2.State,
+            PostalCode: this.selectedItem2.PostalCode,
             Latitude: "",
             Longitude: "",
             LocationText: this.destinationPos,
@@ -320,11 +332,11 @@ export default {
         ],
         UnitMPG: 6,
         RoutingMethod: 0,
-        BorderOpen: true,
-        AvoidTollRoads: false,
+        BorderOpen: this.borderCheck,
+        AvoidTollRoads: this.tollCheck,
         VehicleType: 7,
         AllowRelaxRestrictions: false,
-        GetDrivingDirections: false,
+        GetDrivingDirections: true,
         GetMapPoints: false,
         GetStateMileage: true,
         GetTripSummary: true,
@@ -342,7 +354,7 @@ export default {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(this.myPos);
+          console.log(this.myOrg);
           console.log(JSON.stringify(data));
           this.tresults = data;
           this.$store.commit("setTResults", data);

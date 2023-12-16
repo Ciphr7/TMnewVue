@@ -22,10 +22,10 @@
 
     <v-navigation-drawer
       class="pa-2 bg-blue-grey-darken-3"
-      right
+      
       color="dark"
       v-model="Drawer2"
-      app
+      
       location="right"
     >
       <v-list-item class=" white--text d-flex justify-center">
@@ -41,7 +41,7 @@
         </v-list-item-subtitle>
       </v-list-item>
       <trip-results />
-      <v-divider class="red lighten-1"></v-divider>
+      <v-divider class="bg-red"></v-divider>
      
 
     
