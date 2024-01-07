@@ -3,6 +3,8 @@ node_modules
 /dist
 /src/components/googleApiKey.js
 /src/components/tmAPIKey.js
+/src/components/token.vue
+/src/components/FuelPrices.vue
 
 # local env files
 .env.local

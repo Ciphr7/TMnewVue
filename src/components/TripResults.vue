@@ -41,7 +41,7 @@ export default {
 
   mounted() {
     // Listen for the custom event emitted by the first component
-    this.$root.$on("trip-results", this.handleTripResults);
+    //this.$root.$on("trip-results", this.handleTripResults);
   },
 
   computed: {},

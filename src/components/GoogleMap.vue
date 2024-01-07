@@ -1,9 +1,10 @@
 <template>
+  <div class="map-container">
   <GMapMap
       :center="center"
       :zoom="4"
       map-type-id="terrain"
-      style=" width: 100%; height: calc(var(--vh, 1vh) * 75)"
+      style=" width: 100%; height: 650px"
   >
     <GMapCluster>
       <GMapMarker
@@ -15,7 +16,7 @@
           @click="center=m.position"
       />
     </GMapCluster>
-  </GMapMap>
+  </GMapMap></div>
 </template>
 <script>
 export default {
@@ -35,3 +36,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.map-container {
+  height: 100%; /* Adjust the height as needed */
+  overflow: hidden; 
+}
+</style>
