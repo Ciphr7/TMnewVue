@@ -1,5 +1,5 @@
 <template>
-  <div class="map-container">
+  
   <GMapMap
       :center="center"
       :zoom="4"
@@ -16,7 +16,7 @@
           @click="center=m.position"
       />
     </GMapCluster>
-  </GMapMap></div>
+  </GMapMap>
 </template>
 <script>
 export default {

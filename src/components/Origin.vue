@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <section>
+      <section >
         <v-row>
           <v-col>
             <v-switch
