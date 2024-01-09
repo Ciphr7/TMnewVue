@@ -15,7 +15,7 @@
         />
 
         <Destination
-          :selectedItem="selectedItem2"
+          :selectedItem2="selectedItem2"
           :baseColor="baseColor"
           :color="color"
           :noDataText="noDataText2"
@@ -24,6 +24,7 @@
           :item-value="selectedItem2 ? String(selectedItem2.value) : null"
           :label="label2"
           @update:selectedItem2="updateSelectedItem2"
+          :onUpdateSelectedItem2="updateSelectedItem2"
         />
       
 

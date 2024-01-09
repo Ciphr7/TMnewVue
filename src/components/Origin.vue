@@ -175,38 +175,38 @@ export default {
         alert("User did not allow access to GPS location");
       }
     },
-    onAutocompleteChange: async function (item) {
-      // 'item' contains the selected item
-      if (item) {
-        this.origin = item.text;
-      } else {
-        this.origin = ""; // Handle the case when no item is selected
-      }
+    onAutocompleteChange: async function () {
+  this.loading = true;
 
-      // The rest of your code remains the same
-      this.loading = true;
+  try {
+    const response = await fetch(
+      `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${this.searchInput}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
+    );
 
-      try {
-        const response = await fetch(
-          `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${this.searchInput}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
-        );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+    const data = await response.json();
 
-        const data = await response.json();
+    this.autocompleteItems = data.map((item) => ({
+      text: `${item.City}, ${item.State}, ${item.PostalCode}`,
+      value: item,
+    }));
 
-        this.autocompleteItems = data.map((item) => ({
-          text: `${item.City}, ${item.State}, ${item.PostalCode}`,
-          value: item,
-        }));
-      } catch (error) {
-        console.error("Error fetching autocomplete data", error);
-      } finally {
-        this.loading = false;
-      }
-    },
+    // Update the origin value based on the selected item
+    if (this.localSelectedItem) {
+      this.origin = this.localSelectedItem.text;
+    } else {
+      this.origin = "";
+    }
+  } catch (error) {
+    console.error("Error fetching autocomplete data", error);
+  } finally {
+    this.loading = false;
+  }
+},
+
   
   },
 };
