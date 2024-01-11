@@ -9,7 +9,7 @@
           :noDataText="noDataText"
           :minLength="minLength"
           :itemText="itemText"
-          :item-value="selectedItemValue"
+          :item-value="selectedItem"
           :label="label"
           @update:selectedItem="updateSelectedItem"
         />
@@ -168,7 +168,7 @@ export default {
             PostalCode: "",
             Latitude: this.$store.state.lat,
             Longitude: this.$store.state.lon,
-            LocationText: this.selectedItem ? this.selectedItem.text : this.selectedItem =null,
+            LocationText: this.selectedItem ? this.selectedItem : this.selectedItem =null,
           },
           {
             Address: "",

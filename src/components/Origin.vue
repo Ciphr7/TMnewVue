@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <section >
+      <section>
         <v-row>
           <v-col>
             <v-switch
@@ -21,26 +21,29 @@
     </v-container>
 
     <v-autocomplete
-  v-if="!gpsCheck"
-  v-model="localSelectedItem"
-  :base-color="baseColor"
-  :color="color"
-  :no-data-text="noDataText"
-  :items="autocompleteItems"
-  :loading="loading"
-  :search-input="searchInput"
-  @update:search-input="val => searchInput = val"
-  :min-length="minLength"
-  @input="onAutocompleteChange"
-  :item-text="itemText"
-  :item-value="itemValue ? String(itemValue) : null"
-  :label="label"
-  @update:selectedItem="updateSelectedItem"
-></v-autocomplete>
+      v-if="!gpsCheck"
+      v-model="localSelectedItem"
+      :base-color="baseColor"
+      :color="color"
+      :no-data-text="noDataText"
+      :items="autocompleteItems"
+      :loading="loading"
+      :search-input="searchInput"
+      @update:search-input="(val) => (searchInput = val)"
+      :min-length="minLength"
+      @input="onAutocompleteChange"
+      :item-title="itemTitle"
+      :item-text="itemText"
+      :item-value="itemValue ? String(itemValue) : null"
+      :label="label"
+      @update:selectedItem="updateSelectedItem"
+    ></v-autocomplete>
 
     <div v-else>
-      
-      <div>Using Coordinates as Origin: {{ this.$store.state.lat }}, {{ this.$store.state.lon }}</div>
+      <div>
+        Using your location as Origin: {{ this.$store.state.lat }},
+        {{ this.$store.state.lon }}
+      </div>
       <!-- Use this info as needed -->
     </div>
   </div>
@@ -50,7 +53,7 @@
 export default {
   props: {
     selectedItem: {
-      type: Object,
+      type: String,
       default: null,
     },
     baseColor: {
@@ -98,23 +101,21 @@ export default {
       // Calculate the color based on the value of gpsCheck
       return this.gpsCheck ? "red" : "white";
     },
+    itemTitle() {
+      return (item) => item.text; // Use the 'text' property as the title
+    },
   },
   watch: {
     gpsCheck: function (newValue) {
       if (newValue) {
-       // this.$root.$on("lat", this.lat);
-        //this.$root.$on("lon", this.lon);
         console.log("gpsCheck:", newValue);
         this.$store.state.lon = "";
-        
+
         this.setOriginToCurrentLocation();
       } else {
-        // Don't forget to remove the event listener to avoid memory leaks
-       // this.$root.$off("lat", this.lat);
-      //  this.$root.$off("lon", this.lon);
         this.$store.state.lat = "";
         this.$store.state.lon = "";
-       // this.localSelectedItem = "";
+        // this.localSelectedItem = "";
         this.searchInput = "";
       }
 
@@ -176,38 +177,37 @@ export default {
       }
     },
     onAutocompleteChange: async function () {
-  this.loading = true;
+      this.loading = true;
+      this.searchInput = event.target.value;
 
-  try {
-    const response = await fetch(
-      `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${this.searchInput}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
-    );
+      try {
+        const response = await fetch(
+          `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${this.searchInput}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
+        );
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-    const data = await response.json();
+        const data = await response.json();
 
-    this.autocompleteItems = data.map((item) => ({
-      text: `${item.City}, ${item.State}, ${item.PostalCode}`,
-      value: item,
-    }));
+        this.autocompleteItems = data.map((item) => ({
+          text: `${item.City}, ${item.State}, ${item.PostalCode}`,
+          value: item,
+        }));
 
-    // Update the origin value based on the selected item
-    if (this.localSelectedItem) {
-      this.origin = this.localSelectedItem.text;
-    } else {
-      this.origin = "";
-    }
-  } catch (error) {
-    console.error("Error fetching autocomplete data", error);
-  } finally {
-    this.loading = false;
-  }
-},
-
-  
+        // Update the origin value based on the selected item
+        if (this.localSelectedItem) {
+          this.origin = this.localSelectedItem.text;
+        } else {
+          this.origin = "";
+        }
+      } catch (error) {
+        console.error("Error fetching autocomplete data", error);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>

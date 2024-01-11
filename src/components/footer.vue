@@ -19,7 +19,9 @@
     </v-list-item>
 
     <v-divider class="red lighten-1"></v-divider>
+   
     <trip-details />
+ 
   </v-navigation-drawer>
 
   <v-navigation-drawer

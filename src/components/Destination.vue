@@ -9,22 +9,20 @@
   :loading="loading"
   v-model:search-input="searchInput2"
   :min-length="minLength"
-  @update:search-input="onAutocompleteChange2"
   @input="onAutocompleteChange2"
   :item-text="itemText2"
   :item-value="itemText2 ? String(itemText2) : null"
+  :item-title="itemTitle2"
   :label="label"
 ></v-autocomplete>
   </section>
 </template>
 
 <script>
-import { ref, watch, onBeforeUnmount  } from 'vue'; // Import ref and watch from Vue 3
-
 export default {
   props: {
     selectedItem2: {
-      type: Object,
+      type: String,
       default: null,
     },
     baseColor: {
@@ -44,48 +42,62 @@ export default {
       default: 3,
     },
     itemText2: {
-      type: String,  // Make sure to define itemText2 in the props
+      type: String,
       default: "text",
     },
+    itemValue2: {
+    type: String,
+    default: null,
+  },
     label: {
-      type: String,  // Make sure to define label in the props
+      type: String,
       default: "Destination",
     },
   },
-  setup(props) {
-    const autocompleteItems = ref([]);
-    const loading = ref(false);
-    const searchInput2 = ref("");
-    const dest = ref("");
-    const localselectedItem2 = ref(null);
-
-    watch(searchInput2, (newSearchInput) => {
-      if (newSearchInput && newSearchInput.length >= props.minLength) {
-        onAutocompleteChange2();
-      }
-    });
-
-    watch(localselectedItem2, (newValue2) => {
-      props.onUpdateSelectedItem2(newValue2);
-    });
-    const isComponentMounted = ref(true);
-
-onBeforeUnmount(() => {
-  isComponentMounted.value = false;
-});
-
-    const onAutocompleteChange2 = async function () {
-      if (localselectedItem2.value) {
-        dest.value = localselectedItem2.value;
+  computed: {
+  itemTitle2() {
+    return (item2) => item2.text; // Use the 'text' property as the title
+  },
+},
+  data() {
+    return {
+      autocompleteItems: [],
+      loading: false,
+      searchInput2:  "",
+      dest: "", // Add this line if origin is used in the template
+      localselectedItem2: null,
+    };
+  },
+  watch: {
+    selectedItem2(newValue2) {
+      // Update localselectedItem2 when the prop changes
+      this.localselectedItem2 = newValue2;
+    },
+    searchInput2(newSearchInput) {
+    if (newSearchInput && newSearchInput.length >= this.minLength) {
+      this.onAutocompleteChange2();
+    }
+  },
+    localselectedItem2(newValue2) {
+      // Emit an event to notify the parent when localSelectedItem changes
+      this.$emit("update:selectedItem2", newValue2);
+    },
+  },
+  methods: {
+    onAutocompleteChange2: async function (item) {
+      // 'item' contains the selected item
+      if (item) {
+        this.dest = item.text;
       } else {
-        dest.value = "";
+        this.dest = ""; // Handle the case when no item is selected
       }
-
-      loading.value = true;
+      this.searchInput2 = event.target.value;
+      // The rest of your code remains the same
+      this.loading = true;
 
       try {
         const response = await fetch(
-          `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${dest.value}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
+          `https://prime.promiles.com/WebAPI/api/ValidateLocation?locationText=${this.searchInput2}&apikey=bU03MSs2UjZIS21HMG5QSlIxUTB4QT090`
         );
 
         if (!response.ok) {
@@ -94,27 +106,16 @@ onBeforeUnmount(() => {
 
         const data = await response.json();
 
-        if (isComponentMounted.value) {
-      autocompleteItems.value = data.map((item) => ({
-        text: `${item.City}, ${item.State}, ${item.PostalCode}`,
-        value: item,
-      }));
-    }
-  } catch (error) {
-    console.error("Error fetching autocomplete data", error);
-  } finally {
-        loading.value = false;
+        this.autocompleteItems = data.map((item) => ({
+          text: `${item.City}, ${item.State}, ${item.PostalCode}`,
+          value: item,
+        }));
+      } catch (error) {
+        console.error("Error fetching autocomplete data", error);
+      } finally {
+        this.loading = false;
       }
-    };
-
-    return {
-      autocompleteItems,
-      loading,
-      searchInput2,
-      dest,
-      localselectedItem2,
-      onAutocompleteChange2,
-    };
+    },
   },
 };
 </script>
